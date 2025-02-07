@@ -27,9 +27,9 @@ git clone https://github.com/NIKITATAPALI/PRODIGY_CS_03.git
 ```
 Or manually create the script files:
 ```bash
-nano password_strength.py  # For Python
+nano password_checker.py  # For Python
 nano password_checker.sh   # For Bash
-nano password_checker_dash.py                # For Dash Web App
+nano password_strength_dash.py                # For Dash Web App
 ```
 Copy and paste the respective script into the file and save.
 
@@ -88,7 +88,7 @@ pip install dash
 
 ### ▶️ Run the Web App
 ```bash
-python3 password_checker_dash.py
+python3 password_strength_dash.py
 ```
 
 ### 🌐 Access the App in Your Browser
