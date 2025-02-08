@@ -2,15 +2,16 @@
 
 This project provides a **password strength assessment tool** using **Python, Bash, and Python Dash (Web App)**. It helps users evaluate password strength based on:
 
-✅ **Length of the password**  
-✅ **Presence of uppercase and lowercase letters**  
-✅ **Inclusion of numbers**  
-✅ **Usage of special characters**  
-✅ **Feedback for improvement**
+🌚 **Length of the password**  
+🌚 **Presence of uppercase and lowercase letters**  
+🌚 **Inclusion of numbers**  
+🌚 **Usage of special characters**  
+🌚 **Feedback for improvement**
 
 ---
 
 ## 🚀 Features
+- **Displays a custom ASCII banner** at the start of the script.
 - **Evaluate password strength** using predefined security rules.
 - **Provide user-friendly feedback** on password improvements.
 - **Works as a Command Line Interface (CLI) using Python & Bash.**
@@ -37,7 +38,21 @@ Copy and paste the respective script into the file and save.
 
 ## 🔹 Python Implementation (CLI)
 
-### 📥 Install Dependencies
+### 📞 ASCII Banner
+When running the Python script, the following banner will be displayed:
+```
+██████╗  █████╗ ███████╗███████╗███████╗███████╗████████╗
+██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝╚══██╔══╝
+██████╔╝███████║███████╗███████╗███████╗█████╗     ██║   
+██╔═══╝ ██╔══██║╚════██║╚════██║╚════██║██╔══╝     ██║   
+██║     ██║  ██║███████║███████║███████║███████╗   ██║   
+╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚══════╝   ╚═╝   
+Version: 1.0
+Tool Created by Nikita Tapali
+Contact: kynic406@gmail.com
+```
+
+### 📞 Install Dependencies
 ```bash
 pip install colorama
 ```
@@ -51,14 +66,28 @@ python3 password_strength.py
 ```bash
 Enter a password: P@ssw0rd123
 
-✅ Your password is very strong!
+🌚 Your password is very strong!
 ```
 
 ---
 
 ## 🔹 Bash Implementation (CLI)
 
-### 📥 Make the Script Executable
+### 📞 ASCII Banner
+When running the Bash script, the following banner will be displayed:
+```
+██████╗  █████╗ ███████╗███████╗███████╗███████╗████████╗
+██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝╚══██╔══╝
+██████╔╝███████║███████╗███████╗███████╗█████╗     ██║   
+██╔═══╝ ██╔══██║╚════██║╚════██║╚════██║██╔══╝     ██║   
+██║     ██║  ██║███████║███████║███████║███████╗   ██║   
+╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚══════╝   ╚═╝   
+Version: 1.0
+Tool Created by Nikita Tapali
+Contact: kynic406@gmail.com
+```
+
+### 📞 Make the Script Executable
 ```bash
 chmod +x password_checker.sh
 ```
@@ -81,9 +110,9 @@ Enter a password: test123
 
 ## 🔹 Python Dash Web App (GUI)
 
-### 📥 Install Dependencies
+### 📞 Install Dependencies
 ```bash
-pip install dash
+pip install dash dash-bootstrap-components
 ```
 
 ### ▶️ Run the Web App
@@ -108,6 +137,7 @@ Password: Secure@123
 ### Python Version:
 - `colorama`
 - `dash` (for web app)
+- `dash-bootstrap-components`
 
 ### Bash Version:
 - Works on any standard Linux shell.
@@ -122,7 +152,7 @@ Password: Secure@123
 
 ---
 
-## 📜 License
+## 🐜 License
 This project is licensed under the MIT License.
 
 ---
