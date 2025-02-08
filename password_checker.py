@@ -1,46 +1,53 @@
+# Password Strength Checker - Python CLI
+# Author: Nikita Tapali
+# Contact: kynic406@gmail.com
+# Date: Dynamic (Auto-updates)
+
 import re
+from colorama import Fore, Style, init
+from datetime import datetime
 
-def password_strength(password):
-    strength = 0
-    feedback = []
+# Initialize colorama for colored text output
+init()
 
-    if len(password) >= 8:
-        strength += 1
+# Get the current date dynamically
+current_date = datetime.now().strftime("%Y-%m-%d")
+
+def print_author_info():
+    print("=" * 50)
+    print(Fore.CYAN + "🔐 Password Strength Checker - Python CLI" + Style.RESET_ALL)
+    print(Fore.YELLOW + "📌 Author: Nikita Tapali")
+    print(Fore.YELLOW + "📧 Contact: kynic406@gmail.com")
+    print(Fore.YELLOW + f"📅 Date: {current_date}")
+    print("=" * 50 + "\n" + Style.RESET_ALL)
+
+def check_password_strength(password):
+    strength_criteria = [
+        (r".{8,}", "✅ Password length is good (at least 8 characters)."),
+        (r"[A-Z]", "✅ Contains uppercase letters."),
+        (r"[a-z]", "✅ Contains lowercase letters."),
+        (r"\d", "✅ Contains numbers."),
+        (r"[!@#$%^&*(),.?\":{}|<>]", "✅ Contains special characters."),
+    ]
+
+    print(Fore.GREEN + "Password Feedback:" + Style.RESET_ALL)
+    passed_checks = 0
+
+    for regex, message in strength_criteria:
+        if re.search(regex, password):
+            print(Fore.GREEN + message + Style.RESET_ALL)
+            passed_checks += 1
+        else:
+            print(Fore.RED + "❌ " + message.replace("✅", "Password should") + Style.RESET_ALL)
+
+    if passed_checks == len(strength_criteria):
+        print(Fore.GREEN + "\n✅ Your password is very strong!" + Style.RESET_ALL)
     else:
-        feedback.append("Password should be at least 8 characters long.")
+        print(Fore.RED + "\n❌ Weak password. Please improve it." + Style.RESET_ALL)
 
-    if re.search(r'[A-Z]', password):
-        strength += 1
-    else:
-        feedback.append("Password should contain at least one uppercase letter.")
+# Display Author Info
+print_author_info()
 
-    if re.search(r'[a-z]', password):
-        strength += 1
-    else:
-        feedback.append("Password should contain at least one lowercase letter.")
-
-    if re.search(r'[0-9]', password):
-        strength += 1
-    else:
-        feedback.append("Password should contain at least one number.")
-
-    if re.search(r'[!@#$%^&*(),.?\":{}|<>]', password):
-        strength += 1
-    else:
-        feedback.append("Password should contain at least one special character.")
-
-    if strength == 5:
-        feedback.append("Your password is very strong!")
-    elif strength == 4:
-        feedback.append("Your password is strong.")
-    elif strength == 3:
-        feedback.append("Your password is average. Consider adding more complexity.")
-    else:
-        feedback.append("Your password is weak. Please follow the guidelines to improve it.")
-
-    return "\n".join(feedback)
-
-if __name__ == "__main__":
-    password = input("Enter a password to assess: ")
-    print(password_strength(password))
-
+# User Input
+user_password = input("Enter a password: ")
+check_password_strength(user_password)
