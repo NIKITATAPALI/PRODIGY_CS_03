@@ -1,62 +1,96 @@
-# Password Strength Checker - Dash Web App
-# Author: Nikita Tapali
-# Contact: kynic406@gmail.com
-# Date: Dynamic (Auto-updates)
-
 import dash
 from dash import dcc, html, Input, Output
 import re
-from datetime import datetime
+import dash_bootstrap_components as dbc
+import random
 
-app = dash.Dash(__name__)
+# Initialize Dash app
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-# Get the current date dynamically
-current_date = datetime.now().strftime("%Y-%m-%d")
-
-def check_password_strength(password):
-    strength_criteria = [
-        (r".{8,}", "✅ Password length is good (at least 8 characters)."),
-        (r"[A-Z]", "✅ Contains uppercase letters."),
-        (r"[a-z]", "✅ Contains lowercase letters."),
-        (r"\d", "✅ Contains numbers."),
-        (r"[!@#$%^&*(),.?\":{}|<>]", "✅ Contains special characters."),
-    ]
-
+# Function to check password strength
+def check_password(password):
     feedback = []
-    passed_checks = 0
-
-    for regex, message in strength_criteria:
-        if re.search(regex, password):
-            feedback.append(html.P(message, style={"color": "green"}))
-            passed_checks += 1
-        else:
-            feedback.append(html.P("❌ " + message.replace("✅", "Password should"), style={"color": "red"}))
-
-    if passed_checks == len(strength_criteria):
-        feedback.append(html.P("✅ Your password is very strong!", style={"color": "green"}))
+    
+    if len(password) < 8:
+        feedback.append("❌ Password should be at least 8 characters long.")
     else:
-        feedback.append(html.P("❌ Weak password. Please improve it.", style={"color": "red"}))
-
+        feedback.append("✅ Sufficient length (8+ characters).")
+    
+    if not re.search(r"[A-Z]", password):
+        feedback.append("❌ Password should contain at least one uppercase letter.")
+    else:
+        feedback.append("✅ Contains uppercase letters.")
+    
+    if not re.search(r"[a-z]", password):
+        feedback.append("❌ Password should contain at least one lowercase letter.")
+    else:
+        feedback.append("✅ Contains lowercase letters.")
+    
+    if not re.search(r"\d", password):
+        feedback.append("❌ Password should contain at least one number.")
+    else:
+        feedback.append("✅ Contains numbers.")
+    
+    if not re.search(r"[@$!%*?&]", password):
+        feedback.append("❌ Password should contain at least one special character (@$!%*?&).")
+    else:
+        feedback.append("✅ Contains special characters.")
+    
+    if len(feedback) == 5 and feedback.count("✅") == 5:
+        feedback.append("✅ Strong password! Well done.")
+    else:
+        feedback.append("❌ Weak password. Please improve it.")
+    
     return feedback
 
-app.layout = html.Div([
-    html.H1("🔐 Password Strength Checker - Dash Web App", style={"text-align": "center", "color": "#2c3e50"}),
-    html.H3("📌 Author: Nikita Tapali", style={"text-align": "center", "color": "#16a085"}),
-    html.H3("📧 Contact: kynic406@gmail.com", style={"text-align": "center", "color": "#16a085"}),
-    html.H3(f"📅 Date: {current_date}", style={"text-align": "center", "color": "#16a085"}),
-    html.Br(),
-    dcc.Input(id="password_input", type="text", placeholder="Enter your password", debounce=True, style={"width": "100%", "padding": "10px", "font-size": "16px"}),
-    html.Br(), html.Br(),
-    html.Div(id="password_feedback")
+# Function to generate password suggestions
+def suggest_password():
+    chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&"
+    return "".join(random.choice(chars) for _ in range(12))
+
+# Layout of the Dash app
+app.layout = dbc.Container([
+    html.Div(style={'background': 'linear-gradient(45deg, #ff99cc, #ffcc66)', 'padding': '20px', 'borderRadius': '10px'}, children=[
+        html.H1("🔐 Password Strength Checker", className="text-center mt-4 mb-2", style={'color': 'white'}),
+        html.H5("📌 Author: Nikita Tapali", className="text-center", style={'color': 'black'}),
+        html.H6("📧 Contact: kynic406@gmail.com", className="text-center mb-4", style={'color': 'black'}),
+        dbc.Input(id='password-input', type='password', placeholder='Enter a password', className="mb-3"),
+        dbc.Checkbox(id='show-password', label='Show Password', className='mb-3'),
+        html.Button('Check Password', id='check-button', n_clicks=0, className="btn btn-warning mb-3"),
+        html.Div(id='password-feedback', className="mt-2"),
+        html.Button('Suggest Strong Password', id='suggest-button', n_clicks=0, className="btn btn-info mb-3"),
+        html.Div(id='suggested-password', className="mt-2", style={'font-weight': 'bold', 'color': '#008080'})
+    ])
 ])
 
+# Callback to toggle password visibility
 @app.callback(
-    Output("password_feedback", "children"),
-    Input("password_input", "value")
+    Output('password-input', 'type'),
+    [Input('show-password', 'value')]
 )
-def update_feedback(password):
-    if password:
-        return check_password_strength(password)
+def toggle_password_visibility(show_password):
+    return 'text' if show_password else 'password'
+
+# Callback to update password feedback
+@app.callback(
+    Output('password-feedback', 'children'),
+    [Input('check-button', 'n_clicks')],
+    [Input('password-input', 'value')]
+)
+def update_feedback(n_clicks, password):
+    if n_clicks > 0 and password:
+        feedback = check_password(password)
+        return html.Div([html.P(point, style={"color": "#32CD32"} if "✅" in point else {"color": "#FF4500"}) for point in feedback])
+    return ""
+
+# Callback to suggest strong password
+@app.callback(
+    Output('suggested-password', 'children'),
+    [Input('suggest-button', 'n_clicks')]
+)
+def suggest_strong_password(n_clicks):
+    if n_clicks > 0:
+        return f"🔑 Suggested Password: {suggest_password()}"
     return ""
 
 if __name__ == '__main__':
